@@ -1,0 +1,193 @@
+﻿@model RecipeApplication.Models.MealPlan
+
+@{
+    ViewData["Title"] = "Meal Plan Details";
+}
+<style>
+    /* Hide the clear button */
+    input[type="date"]::-webkit-clear-button {
+        width: 0;
+        height: 0;
+        border: none;
+        background: transparent;
+    }
+</style>
+<div class="mealplan-details">
+    <div class="detail-section">
+        <p class="description"> @Model.Description</p>
+    </div>
+
+    <div class="detail-section dates">
+        <div>
+            <h5>Start</h5>
+            <strong><p>@Model.StartDate.ToString("dd MMM yyyy")</p> </strong>
+        </div>
+        <div>
+            <h5>End</h5>
+            <strong> <p>@Model.EndDate.ToString("dd MMM yyyy")</p></strong>
+        </div>
+    </div>
+
+    <!-- Buttons below meal plan schedule -->
+    <div class="button-container">
+        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addRecipeModal">
+            Add new recipe
+        </button>
+
+        <button type="button" class="btn btn-sm btn-primary" id="generateShoppingListButton" data-bs-toggle="modal" data-bs-target="#shoppingListModal">
+           Generate shopping list
+        </button>
+    </div>
+
+    <!-- Display Recipes for Each Day -->
+    <h4 style="text-align:center">Meal Plan Schedule</h4>
+    <div class="mealplan-schedule">
+        @foreach (var dailyMealPlan in Model.DailyMealPlans)
+        {
+            <div class="daily-mealplan">
+                <h5>@dailyMealPlan.Date.ToString("d MMM yyyy")</h5>
+
+                <div class="meal-types">
+                    <div class="meal-type">
+                        <h5 style="text-decoration:underline">Breakfast</h5>
+                        <ul>
+                            @foreach (var mealPlanRecipe in dailyMealPlan.MealPlanRecipes.Where(mpr => mpr.MealType == "Breakfast"))
+                            {
+                                <li>
+                                    <a asp-controller="Recipe" asp-action="Details" asp-route-name="@mealPlanRecipe.Recipe.Name" class="recipe-link">
+                                        @mealPlanRecipe.Recipe.Name
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="meal-type">
+                        <h5 style="text-decoration:underline">Lunch</h5>
+                        <ul>
+                            @foreach (var mealPlanRecipe in dailyMealPlan.MealPlanRecipes.Where(mpr => mpr.MealType == "Lunch"))
+                            {
+                                <li>
+                                    <a asp-controller="Recipe" asp-action="Details" asp-route-name="@mealPlanRecipe.Recipe.Name" class="recipe-link">
+                                        @mealPlanRecipe.Recipe.Name
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="meal-type">
+                        <h5 style="text-decoration:underline">Dinner</h5>
+                        <ul>
+                            @foreach (var mealPlanRecipe in dailyMealPlan.MealPlanRecipes.Where(mpr => mpr.MealType == "Dinner"))
+                            {
+                                <li>
+                                    <a asp-controller="Recipe" asp-action="Details" asp-route-name="@mealPlanRecipe.Recipe.Name" class="recipe-link">
+                                        @mealPlanRecipe.Recipe.Name
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+
+
+    <div class="mt-5">
+        <a asp-action="Index" class="btn btn-primary btn-sm">Back</a>
+        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger btn-sm">Delete plan</a>
+    </div>
+
+    <!-- Modal HTML for shopping list -->
+    <div class="modal fade" id="shoppingListModal" tabindex="-1" aria-labelledby="shoppingListModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="shoppingListModalLabel">Shopping List</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="shoppingListContent">
+                    <!-- Content will be loaded here via AJAX -->
+                </div>
+                <div class="modal-footer">
+                    @* <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Download list</button> *@
+                    <a class="btn btn-primary" asp-controller="MealPlan" asp-action="DownloadList" asp-route-mealPlanId="@Model.Id">Download list</a>
+                    @* <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button> *@
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- Modal HTML -->
+    <div class="modal fade" id="addRecipeModal" tabindex="-1" aria-labelledby="addRecipeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addRecipeModalLabel">Add a recipe to this meal plan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addRecipeForm" method="post" asp-action="AddRecipeToMealPlan" asp-controller="MealPlan">
+                        <div class="mb-3">
+                            <label for="recipeId" class="form-label">Recipe</label>
+                            <select id="recipeId" name="recipeId" class="form-select">
+                                <!-- Populate options with available recipes -->
+                                @foreach (var recipe in ViewBag.AvailableRecipes)
+                                {
+                                    <option value="@recipe.Id">@recipe.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="date" class="form-label">Date</label>
+                            <input type="date" id="date" name="date" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="mealType" class="form-label">Meal Type</label>
+                            <select id="mealType" name="mealType" class="form-select">
+                                <option value="Breakfast">Breakfast</option>
+                                <option value="Lunch">Lunch</option>
+                                <option value="Dinner">Dinner</option>
+                            </select>
+                        </div>
+                        <input type="hidden" name="mealPlanId" value="@Model.Id" />
+                        <button type="submit" class="btn btn-sm btn-primary">Add Recipe</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var startDate = '@Model.StartDate.ToString("yyyy-MM-dd")';
+        var endDate = '@Model.EndDate.ToString("yyyy-MM-dd")';
+
+        var dateInput = document.getElementById('date');
+        dateInput.min = startDate;
+        dateInput.max = endDate;
+
+        var today = new Date();
+        var todayString = today.toISOString().split('T')[0]; // Format as yyyy-MM-dd
+        dateInput.value = todayString;
+    });
+
+    $('#generateShoppingListButton').click(function () {
+        $.ajax({
+            url: '@Url.Action("GenerateShoppingList", "MealPlan")',
+            type: 'GET',
+            data: { mealPlanId: '@Model.Id' },
+            success: function (result) {
+                $('#shoppingListContent').html(result);
+                $('#shoppingListModal').modal('show');
+            },
+            error: function (xhr, status, error) {
+                console.error('Error loading shopping list:', status, error);
+            }
+        });
+    });
+
+
+</script>

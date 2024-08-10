@@ -1,0 +1,21 @@
+﻿@model IEnumerable<RecipeApplication.Models.Recipe>
+<style>
+
+</style>
+
+
+<div class="row">
+    @foreach (var recipe in Model)
+    {
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+            <div class="card recipe-card" onclick="window.location.href='@Url.Action("Details", "Recipe", new { name = recipe.Name })'">
+                <img src="@recipe.ImageUrl" alt="@recipe.Name" class="card-img-top recipe-image" />
+                <div class="card-body">
+                    <h5 class="card-title">@recipe.Name</h5>
+                    <p class="card-text"><strong>Category:</strong> @recipe.Category</p>
+                    <p class="card-text"><strong>Area:</strong> @recipe.Area</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>

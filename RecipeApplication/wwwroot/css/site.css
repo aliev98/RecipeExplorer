@@ -1,0 +1,365 @@
+html {
+    font-size: 14px;
+}
+
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+.nav-link.active {
+    font-weight: bold; /* Makes the text bold */
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+ 
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+ul{
+    list-style-type:none;
+}
+
+
+.mealplan-details {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+    .mealplan-details h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #343a40;
+    }
+    .mealplan-details .detail-section .description{
+        font-size: 25px;
+    }
+    
+
+.detail-section{
+    margin-bottom: 15px;
+}
+
+    .detail-section h2 {
+        color: #495057;
+    }
+
+    .detail-section p {
+        font-size: 1.1em;
+        color: #6c757d;
+    }
+
+    .detail-section.dates {
+        display: flex;
+        margin-top:30px;
+        gap:30px;
+        /*justify-content;*/
+    }
+
+.mealplan-schedule {
+   
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.daily-mealplan {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+    .daily-mealplan h5{
+        /*color: #007bff;*/
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+.meal-type h4 {
+    color: #343a40;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.meal-type ul {
+    list-style-type: none;
+    padding-left: 0;
+    text-align: center;
+}
+
+.meal-type li {
+    padding: 5px 0;
+    
+}
+ 
+.recipe-link {
+    text-decoration: none;
+    
+    color: black;
+    /*font-size: 1.2em;*/
+    font-size:15px;
+    font-weight: bold;
+}
+
+.recipe-link:hover {
+        /*text-decoration: underline;*/
+}
+
+/* Modal content for shopping list */
+.modal-content {
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.modal-header {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.meal-types {
+    margin-top:20px;
+    display: flex;
+    justify-content: space-between;
+}
+.meal-type {
+    flex: 1;
+    margin-right: 20px; /* Adjust spacing between columns */
+}
+
+.meal-type:last-child {
+     margin-right: 0; /* Remove margin for the last item */
+ }
+
+
+.button-container {
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+    /*align-items: center;*/ /* Center buttons horizontally */
+    /*margin-top: 20px;*/
+    margin: 20px 0;
+}
+
+    .button-container .btn {
+        margin: 5px 0; /* Space between buttons */
+        width: 150px; /* Set a fixed width for buttons */
+        /*padding: 5px 10px;*/ /* Smaller padding for smaller buttons */
+        font-size: 0.9em; /* Slightly smaller font size */
+    }
+
+    .button-container .btn-primary {
+        width: 150px; /* Fixed width for "Add New Recipe" button */
+    }
+
+    .button-container .btn-secondary {
+        width: 200px; /* Wider width for "Generate Shopping List" button */
+    }
+
+.back-button {
+    margin-top: 20px;
+    /*text-align: center;*/
+}
+
+
+
+
+.recipe-details {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.recipe-header{
+    margin-bottom:20px;
+}
+.recipe-header h1 {
+    font-size: 2em;
+    margin-bottom: 10px;
+    text-align:center;
+}
+
+.recipe-header p {
+    margin: 5px 0;
+    font-size: 20px;
+}
+
+.recipe-content {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.recipe-image img {
+    max-width: 300px;
+    border-radius: 8px;
+    margin-right: 20px;
+}
+
+.recipe-instructions {
+    flex-grow: 1;
+}
+
+    .recipe-instructions h3 {
+        margin-top: 0;
+    }
+
+.recipe-youtube {
+    /*text-align: center;*/
+    margin-bottom: 20px;
+}
+
+.btn-youtube {
+    background-color: #FF0000;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+    .btn-youtube:hover {
+        background-color: #CC0000;
+    }
+
+.recipe-ingredients {
+    /*margin-bottom: 20px;*/
+    margin: 30px 0;
+}
+
+    .recipe-ingredients ul {
+        margin-top:30px;
+        list-style-type: none;
+        padding: 0;
+    }
+    .recipe-ingredients h3{
+        text-align:center;
+    }
+
+    .recipe-ingredients li {
+        background: #f8f8f8;
+        margin: 5px 0;
+        padding: 10px;
+        border-radius: 8px;
+    }
+
+.recipe-actions {
+    display: flex;
+    /*justify-content: space-between;*/
+    gap:30px;
+}
+
+    .recipe-actions .btn {
+        padding: 10px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+    }
+
+    .recipe-actions .btn-primary {
+        background-color: #007BFF;
+        color: #fff;
+    }
+
+    .recipe-actions .btn-secondary {
+        background-color: #6C757D;
+        color: #fff;
+    }
+
+    .recipe-actions .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .recipe-actions .btn-secondary:hover {
+        background-color: #565e64;
+    }
+
+
+.container.meal-plan-list {
+    width: 70%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.table th, .table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table th {
+    background-color: #007BFF;
+    color: #fff;
+}
+
+.table td a {
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #fff;
+}
+
+    .table td a.btn-info {
+        background-color: #17a2b8;
+    }
+
+        .table td a.btn-info:hover {
+            background-color: #138496;
+        }
+
+    .table td a.btn-warning {
+        background-color: #ffc107;
+        color: #000;
+    }
+
+        .table td a.btn-warning:hover {
+            background-color: #e0a800;
+        }
+
+    .table td a.btn-danger {
+        background-color: #dc3545;
+    }
+
+        .table td a.btn-danger:hover {
+            background-color: #c82333;
+        }
+
+.text-center {
+    text-align: center;
+}
+
+.mt-3 {
+    margin-top: 1rem;
+}

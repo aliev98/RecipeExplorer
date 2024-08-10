@@ -1,0 +1,87 @@
+﻿@{
+    var identified = User.Identity.IsAuthenticated;
+    var currentController = ViewContext.RouteData.Values["controller"] as string;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - RecipeApplication</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/RecipeApplication.styles.css" asp-append-version="true" />
+</head>
+
+<style>
+</style>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white box-shadow mb-3">
+            <div class="container-fluid">
+                @* <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">RecipeApplication</a> *@
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="navbar-collapse collapse d-sm-inline-flex w-100 p-1">
+               
+                    <div class="d-flex align-items-center">
+                        <h5 class="mb-0 ms-3 me-3">Recipe Explorer</h5>
+@*                         <img src="https://www.themealdb.com/images/ingredients/Cider.png" class="img-fluid me-2" style="width: 30px; height: auto;" alt="Cider"> *@
+                        @* <img src="https://www.themealdb.com/images/ingredients/Lime.png" class="img-fluid me-2" style="width: 30px; height: auto;" alt="Lime"> *@
+                        <img src="https://www.themealdb.com/images/ingredients/Freshly%20Chopped%20Parsley.png" class="img-fluid me-3" style="width: 40px; height: auto;" alt="Parsley">
+                    </div>
+
+                    <ul class="ms-3 fs-5 navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark @(currentController == "Home" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark @(currentController == "Recipe" ? "active" : "")" asp-area="" asp-controller="Recipe" asp-action="Index">Recipes</a>
+                        </li>
+                        @if (identified)
+                        {
+                         <li class="nav-item">
+                                <a class="nav-link text-dark @(currentController == "MealPlan" ? "active" : "")" asp-area="" asp-controller="MealPlan" asp-action="Index">Meal planning</a>
+                          </li>
+                        }
+                    </ul>
+
+                    @if (!identified)
+                    {
+                        <div class="d-flex ms-auto">
+                            <a class="btn btn-outline-primary btn-sm me-2" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                            <a class="btn btn-outline-primary btn-sm" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="d-flex ms-auto">
+                            <a class="btn btn-outline-danger btn-sm me-2" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="position-absolute bottom-0 w-100">
+        <div class="text-center p-1">
+            RecipeApplication @* - <a href="/privacy">Privacy</a> *@
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

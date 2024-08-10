@@ -1,0 +1,70 @@
+﻿@model IEnumerable<RecipeApplication.Models.FavoriteRecipe>
+
+@{
+    ViewData["Title"] = "Home Page";
+    var identified = User.Identity.IsAuthenticated;
+    var firstName = ViewBag.User?.FirstName;
+    var lastName = ViewBag.User?.LastName;
+    var email = ViewBag.User?.Email;
+
+}
+
+@* 
+<div class="container text-center my-4">
+    <h1 class="display-4">Welcome to Recipe Explorer!</h1>
+    <p class="lead">Discover, save, and manage your favorite recipes.</p>
+</div> *@
+
+@if (identified)
+{
+    <div class="container d-flex flex-column align-items-start mt-5">
+        <div class="mb-4">
+            <h4>Signed in as <strong>@firstName @lastName</strong></h4>
+            <p class="text-muted">Email: @email</p>
+        </div>
+
+        <div class="mb-5">
+            <h5 class="mb-4">Favorite Recipes</h5>
+            @if (Model.Any())
+            {
+                <ul class="list-group">
+                    @foreach (var favorite in Model)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a class="recipe-link" href="@Url.Action("Details", "Recipe", new { name = favorite.Recipe.Name })">
+                                @favorite.Recipe.Name
+                            </a>
+                            <a class="link-danger small text-decoration-none" href="@Url.Action("RemoveFavorite", "Recipe", new { name= favorite.Recipe.Name })">
+                                <i class="me-3 bi bi-trash"></i> Remove
+                            </a>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>No favorite recipes yet.</p>
+            }
+        </div>
+    </div>
+}
+        <div class="mt-5">
+            <h3 class="mb-3">About Recipe Explorer</h3>
+            <div class="card border-0 w-75">
+                <div class="card-body">
+                    <p class="card-text">
+                        Recipe Explorer is a web application designed for those who are passionate about cooking and looking for new recipes to try.
+                        This application provides a user-friendly interface to explore, save, and manage various recipes. The app fetches recipe data
+                        from TheMealDB, a comprehensive and free API that offers a vast collection of meal and recipe information.
+                    </p>
+                    <p class="card-text">
+                        Users can browse through an extensive list of recipes available in the app. Each recipe is displayed with its name, category, area, and an image.
+                        Detailed views of recipes include instructions, ingredients, and additional resources like video links, which are fetched from TheMealDB API.
+                    </p>
+                    <p class="card-text">
+                        With a user account in Recipe Explorer, you can create meal plans and add recipes to these plans. This feature allows users to organize their meals over days or weeks.
+                        When adding a recipe to a meal plan, users can select the meal plan, the specific day, and the type of meal (breakfast, lunch, or dinner).
+                    </p>
+                </div>
+            </div>
+        </div>

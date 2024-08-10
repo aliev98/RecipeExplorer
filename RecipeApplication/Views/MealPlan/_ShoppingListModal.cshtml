@@ -1,0 +1,11 @@
+﻿@model IEnumerable<string>
+
+<div class="shopping-list-modal-content">
+@*     <h4>Shopping List</h4> *@
+    <ul class="list-group">
+        @foreach (var ingredient in Model)
+        {
+            <li class="list-group-item">@ingredient</li>
+        }
+    </ul>
+</div>

@@ -1,0 +1,114 @@
+﻿@model IEnumerable<RecipeApplication.Models.Recipe>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recipes</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .recipe-card {
+            margin-bottom: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            height: 100%; /* Allows card to stretch to the full height of the column */
+        }
+
+        .recipe-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .recipe-image {
+            width: 100%;
+            height: 150px; /* Adjust this to control the height of the image */
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 10px; /* Adjust padding around the card content */
+        }
+
+        .card-text {
+            font-size: 0.875rem; /* Adjust font size for readability */
+            margin-bottom: 5px; /* Reduce margin below each text block */
+        }
+
+       .card-text strong {
+            display: block; /* Ensure each label (e.g., "Category:") is on a new line */
+            margin-bottom: 2px; /* Adjust margin below labels */
+        }
+
+        .card-title {
+            font-size: 20px; /* Adjust font size if needed */
+            margin-bottom: 10px; /* Space below title */
+        }
+
+        .btn-primary {
+            margin-top: 10px;
+        }
+
+        #searchInput {
+            margin-bottom: 20px;
+            border-radius: 25px;
+            border: 1px solid #ced4da;
+            padding: 10px 20px;
+            font-size: 1rem;
+            width: 250px;
+        }
+
+        .search-bar-container {
+           /*  display: flex;
+            justify-content: center; */
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h2 class="mb-4">Recipes</h2>
+        <div class="search-bar-container">
+            <input id="searchInput" class="form-control" placeholder="Search for a recipe..." />
+        </div>
+        <div id="recipeList" class="row mt-4">
+            @foreach (var recipe in Model)
+            {
+                <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+                    <div class="card recipe-card" onclick="window.location.href='@Url.Action("Details", "Recipe", new { name = recipe.Name })'">
+                        <img src="@recipe.ImageUrl" alt="@recipe.Name" class="card-img-top recipe-image" />
+                        <div class="card-body">
+                            <h5 class="card-title">@recipe.Name</h5>
+                            <p class="card-text"><strong>Category</strong> @recipe.Category</p>
+                            <p class="card-text"><strong>Area</strong> @recipe.Area</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        document.getElementById('searchInput').addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Optional: Prevents default form submission
+
+                const searchTerm = this.value;
+
+                $.ajax({
+                    url: '@Url.Action("Index", "Recipe")', // Path to the controller action
+                    type: 'POST', // Use GET for search queries
+                    data: { searchTerm: searchTerm }, // Data to send
+                    success: function (data) {
+                        // Assuming data is an HTML fragment
+                        // Update the content of a container (e.g., a div) with the new recipes
+                        document.getElementById('recipeList').innerHTML = data;
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

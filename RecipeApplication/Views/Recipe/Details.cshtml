@@ -1,0 +1,158 @@
+﻿@model RecipeApplication.Models.Recipe
+@{
+    ViewData["Title"] = @Model.Name;
+}
+
+<div class="recipe-details">
+
+    <div class="recipe-header">
+        <h1>@Model.Name</h1>
+        <p>Category: <b>@Model.Category </b> </p>
+        <p>Area: <b>@Model.Area </b> </p>
+    </div>
+
+    <div class="recipe-content">
+        <div class="recipe-image">
+            <img src="@Model.ImageUrl" alt="@Model.Name" />
+        </div>
+        <div class="recipe-instructions">
+            <h3>Instructions</h3>
+            <p>@Model.Instructions</p>
+        </div>
+    </div>
+
+    <div class="recipe-youtube">
+        <a href="@Model.YoutubeUrl" class="btn btn-sm btn-youtube" target="_blank">Watch on YouTube</a>
+    </div>
+
+    <div class="recipe-ingredients">
+        <h3>Ingredients</h3>
+        <ul>
+            @for (int i = 0; i < Model.Ingredients.Count; i++)
+            {
+                <li>@Model.Ingredients[i] (@Model.Measurements[i])</li>
+            }
+        </ul>
+    </div>
+
+    <div class="recipe-actions" id="MyAnchor">
+        <a asp-controller="MealPlan" asp-action="DownloadList" asp-route-name="@Model.Name" class="btn btn-sm btn-primary">Download ingredient list</a>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <a asp-controller="Recipe" asp-action="AddFavorite" asp-route-name="@Model.Name" class="btn btn-sm btn-success">Add to Favorites</a>
+            <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#addMealPlanModal">Add to Meal Plan</button>
+        }
+    </div>
+
+    <p class="mt-3">@TempData["SuccessMessage"]</p>
+</div>
+
+<!-- Modal for Adding to Meal Plan -->
+@if(User.Identity.IsAuthenticated)
+{
+<div class="modal fade" id="addMealPlanModal" tabindex="-1" aria-labelledby="addMealPlanModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addMealPlanModalLabel">Add to meal plan</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                    @if (ViewBag.MealPlans.Count > 0 )
+                    {
+                        
+                <form id="addMealPlanForm" method="post" asp-action="AddRecipeToMealPlan" asp-controller="MealPlan">
+                    <!-- Hidden input to send the Recipe ID -->
+                    <input type="hidden" name="recipeId" value="@Model.Id" />
+
+                    <!-- Meal Plan selection -->
+                    <div class="mb-3">
+                        <label for="mealPlanSelect" class="form-label">Select Meal Plan</label>
+                        <select class="form-select" id="mealPlanSelect" name="mealPlanId" required>
+                            @foreach (var mealPlan in ViewBag.MealPlans)
+                            {
+                                <option value="@mealPlan.Id" data-start-date="@mealPlan.StartDate.ToString("yyyy-MM-dd")" data-end-date="@mealPlan.EndDate.ToString("yyyy-MM-dd")">
+                                    @mealPlan.Description
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Date selection -->
+                    <div class="mb-3">
+                        <label for="mealDaySelect" class="form-label">Select Day</label>
+                        <input type="date" class="form-control" id="mealDaySelect" name="date" required />
+      
+
+                    </div>
+
+                    <!-- Meal Type selection -->
+                    <div class="mb-3">
+                        <label for="mealTypeSelect" class="form-label">Select Meal Type</label>
+                        <select class="form-select" id="mealTypeSelect" name="mealType" required>
+                            <option value="Breakfast">Breakfast</option>
+                            <option value="Lunch">Lunch</option>
+                            <option value="Dinner">Dinner</option>
+                        </select>
+                    </div>
+
+                    <div class="modal-footer">
+                        @* <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> *@
+                        <button type="submit" id="submitBtn" class="btn btn-primary">Add to Meal Plan</button>
+                    </div>
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="text-center"> 
+                            <h5>You have no meal plans yet</h5>
+                        </div>
+                    }
+                </div>
+        </div>
+    </div>
+</div>
+ }
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+
+    
+
+    $(document).ready(function () {
+        // Function to format date as YYYY-MM-DD
+        function formatDate(date) {
+            var day = String(date.getDate()).padStart(2, '0'); // Ensure day is two digits
+            var month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based, so add 1
+            var year = date.getFullYear();
+            return `${year}-${month}-${day}`;
+        }
+
+        // Set today's date as the default value for the date input
+        var today = new Date();
+        var formattedToday = formatDate(today);
+
+        // Set the value of the date input to today's date
+        $('#mealDaySelect').val(formattedToday);
+
+        $('#mealPlanSelect').change(function () {
+            var selectedOption = $(this).find('option:selected');
+            var startDate = selectedOption.data('start-date');
+            var endDate = selectedOption.data('end-date');
+
+            // Set the min and max attributes on the date input
+            $('#mealDaySelect').attr('min', startDate);
+            $('#mealDaySelect').attr('max', endDate);
+
+            // Optionally reset the date value if it's outside the new range
+            var selectedDate = $('#mealDaySelect').val();
+            if (selectedDate < startDate || selectedDate > endDate) {
+                $('#mealDaySelect').val('');
+            }
+        });
+
+        // Trigger change event to set the date range on page load if needed
+        $('#mealPlanSelect').trigger('change');
+    });
+
+</script>
